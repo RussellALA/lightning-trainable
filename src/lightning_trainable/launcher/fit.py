@@ -80,10 +80,10 @@ def main(args=None):
         checkpoint_file = args.continue_from
         checkpoint = torch.load(checkpoint_file)
         fit_kwargs["ckpt_path"] = checkpoint_file
-    if checkpoint is None:
-        hparams = {}
-    else:
-        hparams = checkpoint[LightningModule.CHECKPOINT_HYPER_PARAMS_KEY]
+    #if checkpoint is None:
+    hparams = {}
+    #else:
+    #    hparams = checkpoint[LightningModule.CHECKPOINT_HYPER_PARAMS_KEY]
     hparams = parse_config_dict(args.config_args, hparams)
 
     # Set number of threads (potentially move into trainable, but it's a global property)
