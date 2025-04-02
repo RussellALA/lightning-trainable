@@ -152,6 +152,7 @@ class Trainable(lightning.LightningModule):
             shuffle=not isinstance(self.train_data, IterableDataset),
             pin_memory=auto_pin_memory(self.hparams.pin_memory, self.hparams.accelerator),
             num_workers=self.hparams.num_workers,
+            sampler=DistributedSampler(self.train_data) if self.hparams.strategy.startswith("ddp") else None,
         )
 
     def val_dataloader(self) -> DataLoader | list[DataLoader]:
@@ -168,6 +169,7 @@ class Trainable(lightning.LightningModule):
             shuffle=False,
             pin_memory=auto_pin_memory(self.hparams.pin_memory, self.hparams.accelerator),
             num_workers=self.hparams.num_workers,
+            sampler=DistributedSampler(self.val_data) if self.hparams.strategy.startswith("ddp") else None,
         )
 
     def test_dataloader(self) -> DataLoader | list[DataLoader]:
@@ -184,6 +186,7 @@ class Trainable(lightning.LightningModule):
             shuffle=False,
             pin_memory=auto_pin_memory(self.hparams.pin_memory, self.hparams.accelerator),
             num_workers=self.hparams.num_workers,
+            sampler=DistributedSampler(self.test_data) if self.hparams.strategy.startswith("ddp") else None,
         )
 
     def configure_logger(self, logger_name: str = "TensorBoardLogger", **logger_kwargs) -> Logger:
@@ -225,6 +228,7 @@ class Trainable(lightning.LightningModule):
         trainer_kwargs.setdefault("max_epochs", self.hparams.max_epochs)
         trainer_kwargs.setdefault("max_steps", self.hparams.max_steps)
         trainer_kwargs.setdefault("profiler", self.hparams.profiler)
+        trainer_kwargs.setdefault("strategy", self.hparams.strategy)
 
         return lightning.Trainer(**trainer_kwargs)
 

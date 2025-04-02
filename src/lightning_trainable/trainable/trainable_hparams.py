@@ -28,6 +28,7 @@ class TrainableHParams(HParams):
         every_n_epochs=25,
         save_top_k=5
     )
+    strategy: str = "auto"
 
     @classmethod
     def _migrate_hparams(cls, hparams):
