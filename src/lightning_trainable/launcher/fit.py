@@ -80,7 +80,7 @@ def main(args=None):
         checkpoint_file = args.continue_from
         checkpoint = torch.load(checkpoint_file)
         fit_kwargs["ckpt_path"] = checkpoint_file
-    #if checkpoint is None:
+    # if checkpoint is None:
     hparams = {}
     #else:
     #    hparams = checkpoint[LightningModule.CHECKPOINT_HYPER_PARAMS_KEY]
@@ -114,11 +114,9 @@ def main(args=None):
             )
         )
     elif args.log_dir is not None:
-        save_path = Path(args.save_dir)
+        save_path = Path(args.log_dir)
         logger_kwargs = dict(
-            version=save_path.name,
-            experiment_name=save_path.parent.name,
-            save_dir=save_path.parent.parent
+            save_dir=save_path
         )
     else:
         logger_kwargs = dict()
